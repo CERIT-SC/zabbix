@@ -1,0 +1,10 @@
+<%- | String  $server_ip,
+| -%>
+PidFile=/var/run/zabbix/zabbix_agentd.pid
+LogFile=/var/log/zabbix-agent/zabbix_agentd.log
+LogFileSize=0
+
+Server=<%= $server_ip %>
+ServerActive=<%= $server_ip %>
+
+HostnameItem=system.hostname
