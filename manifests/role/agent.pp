@@ -4,7 +4,7 @@ class zabbix::role::agent {
       'Debian': {
 
          $parameters_for_config = {
-             "path_to_log_file" => "/var/log/zabbix/zabbix_agentd.log",
+             "path_to_log_file" => "/var/log/zabbix-agent/zabbix_agentd.log",
              "server_ip"        => $::zabbix::server_ip,
           }
 
