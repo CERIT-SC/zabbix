@@ -4,7 +4,7 @@ class zabbix (
 ) {
   if ($server == true) {
      include zabbix::role::server
-  } esle {
+  } else {
      include zabbix::role::agent
   }
 }
