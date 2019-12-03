@@ -1,7 +1,8 @@
 <%- | String  $server_ip,
+      String  $path_to_log_file,
 | -%>
 PidFile=/var/run/zabbix/zabbix_agentd.pid
-LogFile=/var/log/zabbix-agent/zabbix_agentd.log
+LogFile=<%= $path_to_log_file %>
 LogFileSize=0
 
 Server=<%= $server_ip %>
