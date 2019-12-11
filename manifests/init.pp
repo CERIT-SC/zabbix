@@ -1,6 +1,7 @@
 class zabbix (
-  Boolean $server    = false,
-  String  $server_ip = "127.0.0.1",
+  Boolean $server         = false,
+  String  $server_ip      = "127.0.0.1",
+  String  $mysql_password = "zabbix",
 ) {
   if ($server == true) {
      include zabbix::role::server
