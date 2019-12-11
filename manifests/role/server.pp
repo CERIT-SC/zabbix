@@ -4,7 +4,7 @@ class zabbix::role::server {
        'CentOS': {
             if $facts['operatingsystemmajrelease'] == "7" {
 
-                package {'zabbix':
+                package {'zabbix-release':
                     provider => 'rpm',
                     ensure   => "installed",
                     source   => 'https://repo.zabbix.com/zabbix/4.0/rhel/7/x86_64/zabbix-release-4.0-2.el7.noarch.rpm',
@@ -23,25 +23,25 @@ class zabbix::role::server {
 
    package { $packages_to_install:
        ensure  => "installed",
-       require => Package['zabbix'],
+       require => Package['zabbix-release'],
    }
    
    exec { 'create zabbix db':
-       subscribte  => Package[$packages_to_install],
+       subscribe   => Package[$packages_to_install],
        command     => '/bin/mysql -uroot -e "create database zabbix character set utf8 collate utf8_bin;"',
        refreshonly => true,
        require     => Package[$packages_to_install],
    }
 
    exec { 'grant privileges on zabbix':
-       subscribte  => Exec['create zabbix db'],
+       subscribe   => Exec['create zabbix db'],
        command     => "/bin/mysql -uroot -e \"grant all privileges on zabbix.* to zabbix@localhost identified by \'${::zabbix::mysql_password}\'\";",
        refreshonly => true,
        require     => Exec['create zabbix db'],
    }
 
    exec { 'import initial schema':
-       subscribte  => Exec[grant privileges on zabbix],
+       subscribe   => Exec['grant privileges on zabbix'],
        command     => "/bin/zcat /usr/share/doc/zabbix-server-mysql*/create.sql.gz | /bin/mysql -uzabbix -p${::zabbix::mysql_password}",
        refreshonly => true,
        require     => Exec['grant privileges on zabbix'],
@@ -51,14 +51,14 @@ class zabbix::role::server {
    file { 'zabbix config':
       ensure  => "present",
       path    => "/etc/zabbix/zabbix_server.conf",
-      content => epp('/zabbix/zabbix_server.conf.epp', { "password" => $::zabbix::mysql_password }),
+      content => epp('zabbix/zabbix_server.conf.epp', { "password" => $::zabbix::mysql_password }),
       require => Package[$packages_to_install],
    }
   
    file { "zabbix frontend":
       ensure  => "present",
       path    => "/etc/httpd/conf.d/zabbix.conf",
-      source  => 'puppet:///modules/zabbix/zabbix_php", 
+      source  => 'puppet:///modules/zabbix/zabbix_php', 
       require => Package[$packages_to_install], 
    }
 
@@ -67,6 +67,8 @@ class zabbix::role::server {
       path    => "/etc/zabbix/web/zabbix.conf.php",
       content => epp('zabbix/zabbix_server.php.epp', { "password" => $::zabbix::mysql_password }),
       require => Package[$packages_to_install],
+      owner   => "apache",
+      group   => "apache",
    }
 
    service { 'zabbix-server':
