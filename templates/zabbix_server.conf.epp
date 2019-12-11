@@ -6,7 +6,7 @@ PidFile=/var/run/zabbix/zabbix_server.pid
 SocketDir=/var/run/zabbix
 DBName=zabbix
 DBUser=zabbix
-DBPassword=<%= $password -%>
+DBPassword=<%= $password %>
 AlertScriptsPath=/usr/lib/zabbix/alertscripts
 ExternalScripts=/usr/lib/zabbix/externalscripts
 LogSlowQueries=3000
