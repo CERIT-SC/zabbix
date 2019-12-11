@@ -82,4 +82,10 @@ class zabbix::role::server {
       enable  => true,
       require => File['zabbix frontend'],
    }
+   
+   service { 'mariadb':
+      ensure  => "running",
+      enable  => true,
+      require => Package[$packages_to_install],
+   }
 }
