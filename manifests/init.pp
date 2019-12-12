@@ -4,6 +4,7 @@ class zabbix (
   String  $mysql_password          = "zabbix",
   Array   $auto_registry_templates = [],
   String  $api_key                 = "",
+  Hash    $templates               = {},
 ) {
   if ($server == true) {
      include zabbix::role::server

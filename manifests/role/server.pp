@@ -94,4 +94,13 @@ class zabbix::role::server {
       url       => "http://${::zabbix::server_ip}/zabbix", 
       apiKey    => $::zabbix::api_key,
    }
+   
+   $::zabbix::templates.each |String $name, Hash $params| {
+      zabbix::objects::template { $name:
+         attributes => $params - ['items'], 
+         items      => $params['items'],
+         url        => "http://${::zabbix::server_ip}/zabbix",
+         apiKey     => $::zabbix::api_key,
+      }
+   }
 }
