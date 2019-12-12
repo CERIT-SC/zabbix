@@ -4,5 +4,5 @@ define zabbix::objects::template (
   String $url,
   String $apiKey,
 ) {
-   zabbix::create_template(attributes, items, url, apiKey)
+   zabbix::create_template($attributes, $items, $url, $apiKey)
 }

@@ -19,15 +19,19 @@ Puppet::Functions.create_function(:'zabbix::create_template') do
          $url_g = url
          $generic_payload = $generic_payload.merge({"auth" => apiKey})
 
+
          attributes = { "method" => "template.create", "params" => attributes }
-         genericHttpPost(attributes)
-         createItems(items)
+         isThereAlreadyTemplate = genericHttpPost(attributes)
+
+         if isThereAlreadyTemplate != false
+            createItems(items)
+         end
       end
 
       def createItems(items)
          items.each do |item|
              attributes = { "method" => "item.create", "params" => item }
-             attributes = attributes.merge({ "params" => { "hostid" => $template_id }})
+             attributes["params"]["hostid"] = $template_id
              genericHttpPost(attributes)
          end
       end
@@ -39,8 +43,13 @@ Puppet::Functions.create_function(:'zabbix::create_template') do
          rescue
             return
          end
-            if $template_id == "" 
-              $template_id = JSON.parse(result)['result']['templateids'][0]
-            end
+         result = JSON.parse(result)
+         if result.key?('error') and result['error']['data'].match(/already exists/)
+            return false
+         elsif $template_id == ""
+            $template_id = result['result']['templateids'][0]
+            return true
+         end
       end
+end
 
