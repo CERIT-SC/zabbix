@@ -88,4 +88,10 @@ class zabbix::role::server {
       enable  => true,
       require => Package[$packages_to_install],
    }
+  
+   zabbix::objects::auto_registry { 'Add host automatic':
+      templates => $::zabbix::auto_registry_templates,
+      url       => "http://${::zabbix::server_ip}/zabbix", 
+      apiKey    => $::zabbix::api_key,
+   }
 }
