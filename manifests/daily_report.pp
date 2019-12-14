@@ -1,7 +1,7 @@
 class zabbix::daily_report (
-   String $email_to,
-   String $smtp_server,
-   String $smtp_port, 
+   String $email_to    = $::zabbix::email_to,
+   String $smtp_server = $::zabbix::smtp_server,
+   String $smtp_port   = $::zabbix::smtp_port, 
 ) {
 
   package { 'net/smtp':
