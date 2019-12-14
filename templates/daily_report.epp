@@ -9,6 +9,22 @@ require 'net/smtp'
 require 'json'
 require 'rest-client'
 require 'date'
+require 'giphy'
+
+
+def htmlMail()
+return '
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Simple Transactional Email</title>
+  </head>
+  <body>
+    <h1>Problemy dna</h1>
+    <ul>
+'
+end
 
 def getProblems()
     from = Date.new(Time.new.year, Time.new.month, Time.new.day).to_time.to_i
@@ -25,12 +41,18 @@ end
 
 def formatMessage(problems)
     message = ""
+    pocitatko = 0
     problems.each do |problem|
        happend_at = DateTime.strptime(problem['clock'], "%s")
-       tmp_text   = "- #{problem['name']} o #{happend_at.hour + 2}:#{happend_at.minute}:#{happend_at.second}\n"
+       tmp_text   = "<li>#{problem['name']} o #{happend_at.hour + 2}:#{happend_at.minute}:#{happend_at.second}</li>\n"
        message    += tmp_text
+       pocitatko  += 1
     end
-    return message
+    if pocitatko == 0
+        return ["<li>Poslusne hlasim, ze sa nic nestalo... Len ten krompac sme zlomili, ked sme zakopavali psa</li>", 0]
+    end
+    return [message, pocitatko]
+
 end
 
 def sendEmail(message)
@@ -42,9 +64,16 @@ def sendEmail(message)
 From: Daily reporter Zabbix <daily.reporter@zabbix.com>
 To: CERIT <<%= $email_to -%>>
 Subject: Daily report #{day}.#{month}.#{year} from Zabbix
+Content-Type: text/html; charset="us-ascii"
 
 
+#{htmlMail()}
 #{message}
+</ul>
+<img src=\"#{gif}\"/>
+</body>
+</html>
+
 END_OF_MESSAGE
     Net::SMTP.start('<%= $smtp_server -%>', <%= $smtp_port -%>) do |smtp|
        smtp.send_message text_message, 
@@ -53,11 +82,34 @@ END_OF_MESSAGE
     end
 end
 
+def generateGif(numberOfMessages)
+    Giphy::Configuration.configure do |config|
+       config.api_key = "m6TrNdr0OUEunqWyElFMGOMmgmMt8IlU"
+    end
+    result = ""
+    begin
+    if numberOfMessages == 0
+       result = Giphy.random('unbelievable')
+    elsif numberOfMessages < 4
+       result = Giphy.random('yes')
+    elsif numberOfMessages < 11
+       result = Giphy.random('not bad')
+    else
+       result = Giphy.random('no')
+    end
+    rescue Exception
+       return result.image_url.to_s
+    end
+       return result.image_url.to_s
+end
+
+
 
 def main()
   problems = getProblems()
-  message = formatMessage(problems)
-  sendEmail(message)
+  result = formatMessage(problems)
+  gif = generateGif(result[1])
+  sendEmail(result[0], gif)
 end
 
 main()
