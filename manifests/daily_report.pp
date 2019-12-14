@@ -11,11 +11,12 @@ class zabbix::daily_report (
 
   file { 'zabbix daily report script':
       path    => '/usr/local/bin/zabbix_daily_report.rb',
-      content => epp('zabbix/daily_report.epp', { "email_to" => $email_to, "smtp_server" => $smtp_server, "smtp_port" => $smtp_port, "api_key" => $::zabbix::apiKey, "url" => "http://${::zabbix::server_ip}/zabbix/api_jsonrpc.php" }),
+      content => epp('zabbix/daily_report.epp', { "email_to" => $email_to, "smtp_server" => $smtp_server, "smtp_port" => $smtp_port, "api_key" => $::zabbix::api_key, "url" => "http://${::zabbix::server_ip}/zabbix/api_jsonrpc.php" }),
       ensure  => 'present',
+      mode    => "0755",
   }  
 
-  cron { 'cron to send daily report'
+  cron { 'cron to send daily report':
       command => '/usr/local/bin/zabbix_daily_report.rb > /dev/null',
       hour    => '0',
       minute  => '0',

@@ -4,6 +4,7 @@
       String  $api_key,
       String  $url,
 | -%>
+#!/usr/bin/ruby
 require 'net/smtp'
 require 'json'
 require 'rest-client'
@@ -15,7 +16,7 @@ def getProblems()
     payload = { "jsonrpc" => "2.0", "method" => "problem.get",  "params" => { "time_from" => "#{from}", "time_till" => "#{to}" }, "id" => 1, "auth" => "<%= $api_key -%>"}
 
     begin
-       result = RestClient::Request.execute(:url => <%= $url -%>, :method => "GET", :verify_ssl => false, :timeout => 10, :payload => payload.to_json, :headers => { "Content-Type" => "application/json"})
+       result = RestClient::Request.execute(:url => "<%= $url -%>", :method => "GET", :verify_ssl => false, :timeout => 10, :payload => payload.to_json, :headers => { "Content-Type" => "application/json"})
     rescue
        return []
     end
@@ -25,8 +26,9 @@ end
 def formatMessage(problems)
     message = ""
     problems.each do |problem|
-       happend_at = DateTime.strptime(problem['clock'])
-       tmp_text   = "- #{problem['name']} o #{happend_at.hour + 2}.#{happend_at.minute}:#{happend_at.second}.\n"
+       happend_at = DateTime.strptime(problem['clock'], "%s")
+       tmp_text   = "- #{problem['name']} o #{happend_at.hour + 2}:#{happend_at.minute}:#{happend_at.second}\n"
+       message    += tmp_text
     end
     return message
 end
@@ -36,15 +38,17 @@ def sendEmail(message)
     month = Time.new.month
     year  = Time.new.year
 
-    message = <<END_OF_MESSAGE
-From: YourRubyApp <info@yourrubyapp.com>
+    text_message = <<END_OF_MESSAGE
+From: Daily reporter Zabbix <daily.reporter@zabbix.com>
 To: CERIT <<%= $email_to -%>>
 Subject: Daily report #{day}.#{month}.#{year} from Zabbix
-   
-    #{message}
+
+
+#{message}
 END_OF_MESSAGE
     Net::SMTP.start('<%= $smtp_server -%>', <%= $smtp_port -%>) do |smtp|
-       smtp.send_message message, 
+       smtp.send_message text_message, 
+       'daily.reporter@zabbix.com',
        '<%= $email_to -%>'
     end
 end
