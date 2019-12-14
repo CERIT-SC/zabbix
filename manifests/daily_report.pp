@@ -4,7 +4,9 @@ class zabbix::daily_report (
    String $smtp_port   = $::zabbix::smtp_port, 
 ) {
 
-  package { 'net/smtp':
+  $required_gems = ['net', 'json', 'rest-client', 'date']
+  
+  package { $required_gems:
       ensure   => 'installed',
       provider => 'gem',
   }
