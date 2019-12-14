@@ -18,11 +18,59 @@ return '
   <head>
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Simple Transactional Email</title>
+    <title>Daily report from Zabbix</title>
+    <style type="text/css" media="screen">
+    	img {     
+		    margin: 0 auto;
+		    text-align: center;
+		    display: block; 
+		    max-width: 100%;
+		}
+		h1  {
+			text-align: center;
+		}
+
+		.cerit {
+			transform: rotate(-22deg);
+			position: relative;
+			top: -30px;
+			text-shadow: 2px 0 0 #fff, -2px 0 0 #fff, 0 2px 0 #fff, 0 -2px 0 #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+			color: red;
+			background: black;
+			display: inline-block;
+			padding: 5px;
+			left: 45%;
+		}
+
+		.title {
+			color: red;
+		}
+
+		ul {
+			text-align: center;
+			list-style: inside;
+			padding: 0;
+			text-shadow: 0 1px 0 rgba(255,255,255,.5);
+		}
+
+		li { 
+			display: inline-block;
+			list-style-type: none;
+			padding: 10px;
+			background: #d53b1e;
+			margin-top: 10px;
+			width: 50%;
+    		color: #fff;
+    		font-weight: 900;
+    	}
+
+    </style>
   </head>
   <body>
-    <h1>Problemy dna</h1>
-    <ul>
+  	<img src="https://assets.zabbix.com/img/logo/zabbix_logo_500x131.png"/>
+  	<h1 class="cerit">CERIT-SC <br/>(Top secret project)</h1>
+  	<h1 class="title">PROBLEMY DNA</h1>
+  	<ul>
 '
 end
 
