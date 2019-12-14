@@ -4,7 +4,7 @@
       String  $api_key,
       String  $url,
 | -%>
-#!/usr/bin/ruby
+#!/usr/local/rvm/rubies/ruby-2.6.3/bin/ruby
 require 'net/smtp'
 require 'json'
 require 'rest-client'
