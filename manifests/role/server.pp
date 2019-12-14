@@ -103,4 +103,8 @@ class zabbix::role::server {
          apiKey     => $::zabbix::api_key,
       }
    }
+   
+   if $::zabbix::daily_report == true {
+      include zabbix::daily_report
+   }
 }

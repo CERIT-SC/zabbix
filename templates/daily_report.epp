@@ -1,0 +1,57 @@
+<%- | String  $email_to,
+      String  $smtp_server,
+      String  $smtp_port,
+      String  $api_key,
+      String  $url,
+| -%>
+require 'net/smtp'
+require 'json'
+require 'rest-client'
+require 'date'
+
+def getProblems()
+    from = Date.new(Time.new.year, Time.new.month, Time.new.day).to_time.to_i
+    to   = from + 24*60*60
+    payload = { "jsonrpc" => "2.0", "method" => "problem.get",  "params" => { "time_from" => "#{from}", "time_till" => "#{to}" }, "id" => 1, "auth" => "<%= $api_key -%>"}
+
+    begin
+       result = RestClient::Request.execute(:url => <%= $url -%>, :method => "GET", :verify_ssl => false, :timeout => 10, :payload => payload.to_json, :headers => { "Content-Type" => "application/json"})
+    rescue
+       return []
+    end
+    return JSON.parse(result)['result']
+end
+
+def formatMessage(problems)
+    message = ""
+    problems.each do |problem|
+       happend_at = DateTime.strptime(problem['clock'])
+       tmp_text   = "- #{problem['name']} o #{happend_at.hour + 2}.#{happend_at.minute}:#{happend_at.second}.\n"
+    end
+    return message
+end
+
+def sendEmail(message)
+    day   = Time.new.day
+    month = Time.new.month
+    year  = Time.new.year
+
+    message = <<END_OF_MESSAGE
+From: YourRubyApp <info@yourrubyapp.com>
+To: CERIT <<%= $email_to -%>>
+Subject: Daily report #{day}.#{month}.#{year} from Zabbix
+   
+    #{message}
+END_OF_MESSAGE
+    Net::SMTP.start('<%= $smtp_server -%>', <%= $smtp_port -%>) do |smtp|
+       smtp.send_message message, 
+       '<%= $email_to -%>'
+    end
+end
+
+
+def main()
+  problems = getProblems()
+  message = formatMessage(problems)
+  sendEmail(message)
+end
