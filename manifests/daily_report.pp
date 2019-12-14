@@ -20,8 +20,8 @@ class zabbix::daily_report (
 
   cron { 'cron to send daily report':
       command => '/usr/local/bin/zabbix_daily_report.rb > /dev/null',
-      hour    => '0',
-      minute  => '0',
+      hour    => '23',
+      minute  => '59',
       require => File['zabbix daily report script'],
   }
 }
