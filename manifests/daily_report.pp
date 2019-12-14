@@ -4,13 +4,6 @@ class zabbix::daily_report (
    String $smtp_port   = $::zabbix::smtp_port, 
 ) {
 
-  $required_gems = ['json', 'rest-client']
-  
-  package { $required_gems:
-      ensure   => 'installed',
-      provider => 'gem',
-  }
-
   file { 'zabbix daily report script':
       path    => '/usr/local/bin/zabbix_daily_report.rb',
       content => epp('zabbix/daily_report.epp', { "email_to" => $email_to, "smtp_server" => $smtp_server, "smtp_port" => $smtp_port, "api_key" => $::zabbix::api_key, "url" => "http://${::zabbix::server_ip}/zabbix/api_jsonrpc.php" }),
