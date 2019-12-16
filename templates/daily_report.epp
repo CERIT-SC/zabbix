@@ -4,12 +4,12 @@
       String  $api_key,
       String  $url,
 | -%>
-#!/usr/local/rvm/rubies/ruby-2.6.3/bin/ruby
+#!/usr/bin/ruby
 require 'net/smtp'
 require 'json'
 require 'rest-client'
 require 'date'
-require 'giphy'
+#!/usr/bin/ruby
 
 
 def htmlMail()
@@ -28,18 +28,6 @@ return '
 		}
 		h1  {
 			text-align: center;
-		}
-
-		.cerit {
-			transform: rotate(-22deg);
-			position: relative;
-			top: -30px;
-			text-shadow: 2px 0 0 #fff, -2px 0 0 #fff, 0 2px 0 #fff, 0 -2px 0 #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
-			color: red;
-			background: black;
-			display: inline-block;
-			padding: 5px;
-			left: 45%;
 		}
 
 		.title {
@@ -68,7 +56,6 @@ return '
   </head>
   <body>
   	<img src="https://assets.zabbix.com/img/logo/zabbix_logo_500x131.png"/>
-  	<h1 class="cerit">CERIT-SC <br/>(Top secret project)</h1>
   	<h1 class="title">PROBLEMY DNA</h1>
   	<ul>
 '
@@ -129,28 +116,30 @@ END_OF_MESSAGE
        '<%= $email_to -%>'
     end
 end
-
 def generateGif(numberOfMessages)
-    Giphy::Configuration.configure do |config|
-       config.api_key = "m6TrNdr0OUEunqWyElFMGOMmgmMt8IlU"
-    end
+    api_instance = GiphyClient::DefaultApi.new
+    api_key = "m6TrNdr0OUEunqWyElFMGOMmgmMt8IlU"
+    opts = {
+          rating: "g", # String | Filters results by specified rating.
+          fmt: "json" # String | Used to indicate the expected response format. Default is Json.
+    }
     result = ""
     begin
     if numberOfMessages == 0
-       result = Giphy.random('unbelievable')
+       opts['tag'] = "unbelievable"
     elsif numberOfMessages < 4
+       opts['tag'] = "yes"
        result = Giphy.random('yes')
     elsif numberOfMessages < 11
-       result = Giphy.random('not bad')
+       opts['tag'] = "not bad"
     else
-       result = Giphy.random('no')
+       opts['tag'] = "no"
     end
     rescue Exception
-       return result.image_url.to_s
+       puts "Shit happens"
     end
-       return result.image_url.to_s
+       return api_instance.gifs_random_get(api_key, opts).data.image_url
 end
-
 
 
 def main()
