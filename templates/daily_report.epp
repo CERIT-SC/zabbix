@@ -9,7 +9,7 @@ require 'net/smtp'
 require 'json'
 require 'rest-client'
 require 'date'
-#!/usr/bin/ruby
+require 'GiphyClient'
 
 
 def htmlMail()
