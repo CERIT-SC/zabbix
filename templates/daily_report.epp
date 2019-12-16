@@ -90,7 +90,7 @@ def formatMessage(problems)
 
 end
 
-def sendEmail(message)
+def sendEmail(message, gif)
     day   = Time.new.day
     month = Time.new.month
     year  = Time.new.year
@@ -129,7 +129,6 @@ def generateGif(numberOfMessages)
        opts['tag'] = "unbelievable"
     elsif numberOfMessages < 4
        opts['tag'] = "yes"
-       result = Giphy.random('yes')
     elsif numberOfMessages < 11
        opts['tag'] = "not bad"
     else
