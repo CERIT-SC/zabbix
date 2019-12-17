@@ -10,11 +10,12 @@ Puppet::Functions.create_function(:'zabbix::create_template') do
       dispatch :create_template do
          param 'Hash',   :attributes
          param 'Array',  :items
+         param 'Array',  :triggers
          param 'String', :url
          param 'String', :apiKey
       end
 
-      def create_template(attributes, items, url, apiKey)
+      def create_template(attributes, items, triggers, url, apiKey)
          url += "/api_jsonrpc.php"
          $url_g = url
          $generic_payload = $generic_payload.merge({"auth" => apiKey})
@@ -25,6 +26,7 @@ Puppet::Functions.create_function(:'zabbix::create_template') do
 
          if isThereAlreadyTemplate != false
             createItems(items)
+            createTriggers(triggers)
          end
       end
 
@@ -35,6 +37,13 @@ Puppet::Functions.create_function(:'zabbix::create_template') do
              genericHttpPost(attributes)
          end
       end
+
+
+      def createTriggers(triggers)
+         attributes = { "method" => "trigger.create", "params" => triggers }
+         genericHttpPost(attributes)
+      end
+
 
       def genericHttpPost(payload)
          payload = payload.merge($generic_payload)

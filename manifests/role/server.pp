@@ -97,8 +97,9 @@ class zabbix::role::server {
    
    $::zabbix::templates.each |String $name, Hash $params| {
       zabbix::objects::template { $name:
-         attributes => $params - ['items'], 
+         attributes => $params - ['items', 'triggers'], 
          items      => $params['items'],
+         triggers   => $params['triggers'],
          url        => "http://${::zabbix::server_ip}/zabbix",
          apiKey     => $::zabbix::api_key,
       }
