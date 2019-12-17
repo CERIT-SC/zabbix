@@ -64,7 +64,7 @@ end
 def getProblems()
     from = Date.new(Time.new.year, Time.new.month, Time.new.day).to_time.to_i
     to   = from + 24*60*60
-    payload = { "jsonrpc" => "2.0", "method" => "problem.get",  "params" => { "time_from" => "#{from}", "time_till" => "#{to}" }, "id" => 1, "auth" => "<%= $api_key -%>"}
+    payload = { "jsonrpc" => "2.0", "method" => "problem.get",  "params" => { "time_from" => "#{from}", "time_till" => "#{to}", "recent" => "true" }, "id" => 1, "auth" => "<%= $api_key -%>"}
 
     begin
        result = RestClient::Request.execute(:url => "<%= $url -%>", :method => "GET", :verify_ssl => false, :timeout => 10, :payload => payload.to_json, :headers => { "Content-Type" => "application/json"})
