@@ -8,7 +8,7 @@ Puppet::Functions.create_function(:'zabbix::create_autoregistry') do
 
       dispatch :create_autoregistry do
          param 'Array',  :templates
-         param 'Hash',   :params,
+         param 'Hash',   :params
          param 'String', :url
          param 'String', :apiKey
       end
@@ -33,7 +33,7 @@ Puppet::Functions.create_function(:'zabbix::create_autoregistry') do
       def getIdOfTemplates(templates)
          arguments = { "method" => "template.get", "params" => {"filter" => { "host" => templates }}}
          result = genericHttpGet(arguments)
-         result.map { |template| { "templateid" => "#{template['templateid']}"} }
+         result = result.map { |template| { "templateid" => "#{template['templateid']}"} }
          return result
       end
 
