@@ -1,6 +1,7 @@
 <%- | String  $server_ip,
       String  $path_to_log_file,
       Hash    $userparameter = {},
+      Array   $hostmetadata  = [],
 | -%>
 PidFile=/var/run/zabbix/zabbix_agentd.pid
 LogFile=<%= $path_to_log_file %>
@@ -10,6 +11,9 @@ Server=<%= $server_ip %>
 ServerActive=<%= $server_ip %>
 
 HostnameItem=system.hostname
+<% $hostmetadata.each |$value| { -%>
+HostMetadata=<%= $value %>
+<% } -%>
 <% $userparameter.each |$key, $value| { -%>
 UserParameter=<%= $key %>, <%= $value %>
 <% } -%>

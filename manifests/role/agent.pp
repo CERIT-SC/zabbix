@@ -7,6 +7,7 @@ class zabbix::role::agent {
              "path_to_log_file" => "/var/log/zabbix-agent/zabbix_agentd.log",
              "server_ip"        => $::zabbix::server_ip,
              "userparameter"    => $::zabbix::user_parameters,
+             "hostmetadata"     => $::zabbix::hostmetadata,
           }
 
           package {"zabbix-agent":
@@ -20,6 +21,7 @@ class zabbix::role::agent {
                                      "path_to_log_file" => "/var/log/zabbix/zabbix_agentd.log",
                                      "server_ip"        => $::zabbix::server_ip,
                                      "userparameter"    => $::zabbix::user_parameters,
+                                     "hostmetadata"     => $::zabbix::hostmetadata,
                                    }
 
           package {'zabbix-release':
