@@ -9,6 +9,7 @@ class zabbix (
   String  $smtp_server             = "localhost.localdomain",
   String  $smtp_port               = "25",
   String  $email_to                = "example@example.com",
+  Hash    $userparameter           = {}
 ) {
   if ($server == true) {
      include zabbix::role::server
