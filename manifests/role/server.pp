@@ -103,7 +103,7 @@ class zabbix::role::server {
       zabbix::objects::auto_registry { $name:
          templates => $params[templates],
          params    => $params - ['templates'],
-:x
+         url       => "http://${::zabbix::server_ip}/zabbix",
          apiKey    => $::zabbix::api_key,
       }
    }
