@@ -89,19 +89,22 @@ class zabbix::role::server {
       require => Package[$packages_to_install],
    }
   
-   zabbix::objects::auto_registry { 'Add host automatic':
-      templates => $::zabbix::auto_registry_templates,
-      url       => "http://${::zabbix::server_ip}/zabbix", 
-      apiKey    => $::zabbix::api_key,
-   }
-   
    $::zabbix::templates.each |String $name, Hash $params| {
       zabbix::objects::template { $name:
-         attributes => $params - ['items', 'triggers'], 
+         attributes => $params - ['items', 'triggers'],
          items      => $params['items'],
          triggers   => $params['triggers'],
          url        => "http://${::zabbix::server_ip}/zabbix",
          apiKey     => $::zabbix::api_key,
+      }
+   }
+
+   $::zabbix::auto_registry.each |String $name, Hash $params| {
+      zabbix::objects::auto_registry { $name:
+         templates => $params[templates],
+         params    => $params - ['templates'],
+:x
+         apiKey    => $::zabbix::api_key,
       }
    }
    

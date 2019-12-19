@@ -2,7 +2,7 @@ class zabbix (
   Boolean $server                  = false,
   String  $server_ip               = "127.0.0.1",
   String  $mysql_password          = "zabbix",
-  Array   $auto_registry_templates = [],
+  Hash    $auto_registry           = {},
   String  $api_key                 = "",
   Hash    $templates               = {},
   Boolean $daily_report            = false,
