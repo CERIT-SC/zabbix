@@ -21,7 +21,11 @@ Puppet::Functions.create_function(:'zabbix::create_autoregistry') do
 
          ids = getIdOfTemplates(templates)
          attributes = { "method" => "action.create", "params" => params }
-         attributes['params']['operations'].push({ "operationtype" => 6, "optemplate" => ids })
+         if attributes['params'].key?('operations')
+             attributes['params']['operations'].push({ "operationtype" => 6, "optemplate" => ids })
+         else
+             attributes['params']['operations'] = [{ "operationtype" => 6, "optemplate" => ids }]
+         end
          genericHttpPost(attributes)
       end
 
