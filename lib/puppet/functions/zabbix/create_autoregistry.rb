@@ -27,7 +27,7 @@ Puppet::Functions.create_function(:'zabbix::create_autoregistry') do
 
 
       def getIdOfTemplates(templates)
-         arguments = { "method" => "template.get", "params" => {"filter" => { "host" => template }}}
+         arguments = { "method" => "template.get", "params" => {"filter" => { "host" => templates }}}
          result = genericHttpGet(arguments)
          result.map { |template| { "templateid" => "#{template['templateid']}"} }
          return result
