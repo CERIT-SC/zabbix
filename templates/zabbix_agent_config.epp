@@ -10,6 +10,6 @@ Server=<%= $server_ip %>
 ServerActive=<%= $server_ip %>
 
 HostnameItem=system.hostname
-<% $options.each |$key, $value| { -%>
+<% $userparameter.each |$key, $value| { -%>
 UserParameter=<%= $key %>, <%= $value %>
 <% } -%>
