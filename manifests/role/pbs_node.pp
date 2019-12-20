@@ -9,7 +9,8 @@ class zabbix::role::pbs_node (
   END
 
   file { '/etc/zabbix/zabbix_agentd.d':
-     ensure => 'directory',
+     ensure  => 'directory',
+     require => Class['zabbix::role::agent'],
   }
 
   file { 'PBS check enable':
