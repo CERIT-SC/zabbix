@@ -10,6 +10,8 @@ LogFileSize=0
 Server=<%= $server_ip %>
 ServerActive=<%= $server_ip %>
 
+Include=/etc/zabbix/zabbix_agentd.d/*.conf
+
 HostnameItem=system.hostname
 <% $hostmetadata.each |$value| { -%>
 HostMetadata=<%= $value %>
