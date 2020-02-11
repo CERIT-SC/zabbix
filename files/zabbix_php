@@ -19,6 +19,17 @@ Alias /zabbix /usr/share/zabbix
         php_value always_populate_raw_post_data -1
         php_value date.timezone Europe/Prague
     </IfModule>
+    <IfModule mod_php7.c>
+        php_value max_execution_time 300
+        php_value memory_limit 128M
+        php_value post_max_size 16M
+        php_value upload_max_filesize 2M
+        php_value max_input_time 300
+        php_value max_input_vars 10000
+        php_value always_populate_raw_post_data -1
+        php_value date.timezone Europe/Prague
+    </IfModule>
+
 </Directory>
 
 <Directory "/usr/share/zabbix/conf">

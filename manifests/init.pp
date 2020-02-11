@@ -11,6 +11,7 @@ class zabbix (
   String  $email_to                = "example@example.com",
   Hash    $user_parameters         = {},
   Array   $hostmetadata            = [],
+  Boolean $letsencrypt             = false,
 ) {
   if ($server == true) {
      include zabbix::role::server
