@@ -32,10 +32,6 @@ Puppet::Type.type(:zabbix_template).provide(:ruby, parent: Puppet::Provider::Zab
           createMissing: true,
           updateExisting: true
         },
-        screens: {
-          createMissing: true,
-          updateExisting: true
-        },
         templateLinkage: {
           createMissing: true
         },
